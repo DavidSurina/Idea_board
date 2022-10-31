@@ -1,5 +1,8 @@
 {
-    "compilerOptions": {
-      "jsx": "react"
-    }
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "jsx": "react"
   }
+}
