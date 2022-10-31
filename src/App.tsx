@@ -15,7 +15,9 @@ function App(): JSX.Element {
       </header>
       <body className="body">
         <div className="input_wrapper">
-          <input className="main_heading" value={userInput} placeholder="Idea input" onChange={e => setUserInput(e.target.value)}></input>
+          <input className="input" value={userInput} placeholder="Idea title" onChange={e => setUserInput(e.target.value)} maxLength={140}/>
+          <textarea className="textarea" maxLength={140} placeholder="Idea title description" draggable={false}/>
+          <button className="input_btn">Add idea</button>
         </div>
         <div className="boards_wrapper">
 
