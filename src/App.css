@@ -76,6 +76,12 @@
   border: 1px solid #282c34;
 }
 
+.input_btn:disabled {
+  color: darkgray;
+  background-color: gray;
+  border: darkgray;
+}
+
 .board_wrapper {
   width: 100%;
   display: flex;

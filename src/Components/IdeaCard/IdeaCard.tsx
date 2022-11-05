@@ -34,6 +34,13 @@ function IdeaCard(props: propTypes): JSX.Element {
     });
   }
 
+  function deleteCard(): void {
+    setter({
+      type: "delete",
+      id: id,
+    });
+  }
+
   const titleBtnRender = !editTitle.isEditable ? (
     <button
       type="button"
@@ -108,10 +115,6 @@ function IdeaCard(props: propTypes): JSX.Element {
     <div className="card_text">{editDesc.value}</div>
   );
 
-  function onDeletePress(): void {
-    console.log("deleted");
-  }
-
   return (
     <div className="card_wrapper">
       <div className="row">
@@ -125,7 +128,7 @@ function IdeaCard(props: propTypes): JSX.Element {
       </div>
       {descRender}
       <div className="btn_row">
-        <button className="delete_btn" onClick={onDeletePress}>
+        <button className="delete_btn" onClick={deleteCard}>
           Delete idea
         </button>
         <div>{`${changed}`}</div>

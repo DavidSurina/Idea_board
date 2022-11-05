@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useState, useId } from "react";
 import "./App.css";
 import IdeaCard from "./Components/IdeaCard/IdeaCard";
+import { v4 as uuidv4 } from "uuid";
 
 export type ideaState = {
   title: string;
@@ -10,16 +11,17 @@ export type ideaState = {
 };
 
 function App(): JSX.Element {
-  const titleInputRef = useRef<HTMLInputElement>();
-  const textAreaRef = useRef<HTMLTextAreaElement>();
+  const [titleInput, setTitleInput] = useState("");
+  const [textAreaInput, setTextAreaInput] = useState("");
 
   const [items, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case "add":
+        const id = uuidv4();
         return [
           ...state,
           {
-            id: state.length,
+            id: id,
             title: action.title,
             textArea: action.textArea,
             changed: action.changed,
@@ -38,7 +40,7 @@ function App(): JSX.Element {
             : item;
         });
       case "delete":
-        return state.filter((_, index) => index !== action.index);
+        return state.filter((item) => item.id !== action.id);
       default:
         return state;
     }
@@ -50,24 +52,23 @@ function App(): JSX.Element {
 
   function handleSubmit(e): void {
     e.preventDefault();
-    if (
-      titleInputRef.current.value !== "" &&
-      textAreaRef.current.value !== ""
-    ) {
+    if (titleInput !== "" && textAreaInput !== "") {
       dispatch({
         type: "add",
-        title: titleInputRef?.current?.value,
-        textArea: textAreaRef?.current?.value,
+        title: titleInput,
+        textArea: textAreaInput,
         changed: new Date().toLocaleString(),
       });
-      titleInputRef.current.value = "";
-      textAreaRef.current.value = "";
+      setTitleInput("");
+      setTextAreaInput("");
     }
   }
 
   const boardsRender =
     items.length > 0 ? (
-      items.map((idea) => <IdeaCard ideaObj={idea} setter={dispatch} />)
+      items.map((idea) => (
+        <IdeaCard key={idea.id} ideaObj={idea} setter={dispatch} />
+      ))
     ) : (
       <div>No ideas yet</div>
     );
@@ -80,21 +81,27 @@ function App(): JSX.Element {
       <body className="body">
         <form className="input_wrapper" onSubmit={handleSubmit}>
           <input
-            ref={titleInputRef}
+            value={titleInput}
             className="input"
             placeholder="Idea title"
             minLength={5}
             maxLength={30}
+            onChange={(e) => setTitleInput(e.target.value)}
           />
           <textarea
-            ref={textAreaRef}
+            value={textAreaInput}
             className="textarea"
             minLength={10}
             maxLength={140}
             rows={4}
             placeholder="Idea title description"
+            onChange={(e) => setTextAreaInput(e.target.value)}
           />
-          <button className="input_btn" type="submit">
+          <button
+            className="input_btn"
+            type="submit"
+            disabled={titleInput === "" || textAreaInput === ""}
+          >
             Add idea
           </button>
         </form>
