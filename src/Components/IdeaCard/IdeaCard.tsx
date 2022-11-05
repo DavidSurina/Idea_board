@@ -12,15 +12,100 @@ type propTypes = {
 
 function IdeaCard(props: propTypes): JSX.Element {
   const { ideaObj, setter } = props;
-  const { title, textArea, changed } = ideaObj;
-  const [editTitle, setEditTitle] = useState(false);
-  const [editDesc, setEditDesc] = useState(false);
+  const { title, textArea, changed, id } = ideaObj;
+  const [editTitle, setEditTitle] = useState({
+    isEditable: false,
+    value: title,
+  });
+  const [editDesc, setEditDesc] = useState({
+    isEditable: false,
+    value: textArea,
+  });
+  const initialInputValue = title;
+  const initialTextareaValue = textArea;
 
-  const titleRender = editTitle ? <input value={title} /> : <div>{title}</div>;
-  const descRender = editDesc ? (
-    <textarea value={textArea} />
+  function updateCard(): void {
+    setter({
+      type: "update",
+      id: id,
+      title: editTitle.value,
+      textArea: editDesc.value,
+      changed: new Date().toLocaleString(),
+    });
+  }
+
+  const titleBtnRender = !editTitle.isEditable ? (
+    <button
+      type="button"
+      onClick={() => {
+        setEditTitle((prevState) => ({ ...prevState, isEditable: true }));
+        console.log("fired", editTitle);
+      }}
+    >
+      Edit
+    </button>
   ) : (
-    <div>{textArea}</div>
+    <button
+      disabled={editTitle.value === initialInputValue}
+      type="button"
+      onClick={() => {
+        updateCard();
+        setEditTitle((prevState) => ({ ...prevState, isEditable: false }));
+      }}
+    >
+      Update
+    </button>
+  );
+
+  const titleRender = editTitle.isEditable ? (
+    <input
+      className="card_input"
+      minLength={5}
+      maxLength={30}
+      value={editTitle.value}
+      onChange={(e) =>
+        setEditTitle((prevState) => ({ ...prevState, value: e.target.value }))
+      }
+    />
+  ) : (
+    <div className="card_text">{editTitle.value}</div>
+  );
+
+  const textAreaBtnRender = !editDesc.isEditable ? (
+    <button
+      type="button"
+      onClick={() =>
+        setEditDesc((prevState) => ({ ...prevState, isEditable: true }))
+      }
+    >
+      Edit
+    </button>
+  ) : (
+    <button
+      disabled={editDesc.value === initialTextareaValue}
+      type="button"
+      onClick={() => {
+        updateCard();
+        setEditDesc((prevState) => ({ ...prevState, isEditable: false }));
+      }}
+    >
+      Update
+    </button>
+  );
+
+  const descRender = editDesc.isEditable ? (
+    <textarea
+      className="card_textArea"
+      minLength={10}
+      maxLength={140}
+      rows={5}
+      value={editDesc.value}
+      onChange={(e) =>
+        setEditDesc((prevState) => ({ ...prevState, value: e.target.value }))
+      }
+    />
+  ) : (
+    <div className="card_text">{editDesc.value}</div>
   );
 
   function onDeletePress(): void {
@@ -28,15 +113,17 @@ function IdeaCard(props: propTypes): JSX.Element {
   }
 
   return (
-    <div className="wrapper">
+    <div className="card_wrapper">
       <div className="row">
         <p>Title:</p>
-        {titleRender}
+        {titleBtnRender}
       </div>
+      {titleRender}
       <div className="row">
         <p>Description:</p>
-        {descRender}
+        {textAreaBtnRender}
       </div>
+      {descRender}
       <div className="btn_row">
         <button className="delete_btn" onClick={onDeletePress}>
           Delete idea

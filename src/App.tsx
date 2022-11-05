@@ -6,6 +6,7 @@ export type ideaState = {
   title: string;
   textArea: string;
   changed: Date | undefined;
+  id: string;
 };
 
 function App(): JSX.Element {
@@ -24,6 +25,18 @@ function App(): JSX.Element {
             changed: action.changed,
           },
         ];
+      case "update":
+        return state.map((item) => {
+          console.log(action);
+          return item.id === action.id
+            ? {
+                id: item.id,
+                title: action.title,
+                textArea: action.textArea,
+                changed: action.changed,
+              }
+            : item;
+        });
       case "delete":
         return state.filter((_, index) => index !== action.index);
       default:
@@ -78,7 +91,7 @@ function App(): JSX.Element {
             className="textarea"
             minLength={10}
             maxLength={140}
-            rows={3}
+            rows={4}
             placeholder="Idea title description"
           />
           <button className="input_btn" type="submit">
