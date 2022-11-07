@@ -60,7 +60,8 @@
 
 .input_btn {
   min-width: 3.5rem;
-  margin-left: 1rem;
+  min-height: 2rem;
+  margin: 0 1rem;
   padding: 0.5rem;
   color: white;
   background-color: #282c34;
@@ -86,8 +87,38 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 1rem;
   align-items: center;
   flex-wrap: wrap;
   color: white;
+}
+
+.filter_wrapper {
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: white;
+  font-size: calc(10px + 0.4vmin);
+}
+
+.filter_btn-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.filter_separator {
+  height: 100%;
+  background-color: white;
+  width: 2px;
+}
+
+@media only screen and (max-width: 900px) {
+  .input {
+    width: 75%;
+  }
+
+  .textarea {
+    width: 75%;
+  }
 }

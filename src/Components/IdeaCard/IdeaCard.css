@@ -1,9 +1,9 @@
 .card_wrapper {
-  min-width: 250px;
+  min-width: 350px;
   width: 40%;
+  max-width: 500px;
+  min-height: 500px;
   padding: 0.5rem 0;
-  margin: 1rem 4%;
-  min-height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -14,20 +14,20 @@
 }
 
 .row {
-  display: flex;
   width: 90%;
   margin: 0 auto;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .row p {
-  font-weight: bold;
   margin: 0;
+  font-weight: bold;
 }
 
-.delete_btn {
+.card_btn {
   min-width: 3.5rem;
   padding: 0.5rem;
   color: white;
@@ -38,10 +38,16 @@
   transition: all 0.2s;
 }
 
-.delete_btn:hover {
+.card_btn:hover {
   color: #282c34;
   background-color: white;
   border: 1px solid #282c34;
+}
+
+.card_btn:disabled {
+  color: darkgray;
+  background-color: gray;
+  border: darkgray;
 }
 
 .card_input {
@@ -67,4 +73,20 @@
   margin: 0 auto 1rem auto;
   text-align: left;
   overflow-wrap: break-word;
+}
+
+@media only screen and (max-width: 900px) {
+  .card_wrapper {
+    width: 75%;
+    max-width: unset;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .card_wrapper {
+    width: 100%;
+    max-width: unset;
+    margin: 0;
+  }
 }

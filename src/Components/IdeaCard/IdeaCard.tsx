@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, Dispatch } from "react";
 import { ideaState } from "../../App";
 import "./IdeaCard.css";
 
 type propTypes = {
   ideaObj: ideaState;
-  setter: any;
+  setter: Dispatch<any>;
 };
 
 function IdeaCard(props: propTypes): JSX.Element {
@@ -42,6 +42,7 @@ function IdeaCard(props: propTypes): JSX.Element {
   const titleBtnRender = !editTitle.isEditable ? (
     <button
       data-testid="edit_input"
+      className="card_btn"
       type="button"
       onClick={() => {
         setEditTitle((prevState) => ({ ...prevState, isEditable: true }));
@@ -52,6 +53,7 @@ function IdeaCard(props: propTypes): JSX.Element {
   ) : (
     <button
       data-testid="update_input"
+      className="card_btn"
       disabled={editTitle.value === initialInputValue}
       type="button"
       onClick={() => {
@@ -80,6 +82,7 @@ function IdeaCard(props: propTypes): JSX.Element {
   const textAreaBtnRender = !editDesc.isEditable ? (
     <button
       data-testid="edit_textArea"
+      className="card_btn"
       type="button"
       onClick={() =>
         setEditDesc((prevState) => ({ ...prevState, isEditable: true }))
@@ -90,6 +93,7 @@ function IdeaCard(props: propTypes): JSX.Element {
   ) : (
     <button
       data-testid="update_textArea"
+      className="card_btn"
       disabled={editDesc.value === initialTextareaValue}
       type="button"
       onClick={() => {
@@ -137,7 +141,7 @@ function IdeaCard(props: propTypes): JSX.Element {
         {changed ? `${changed}` : "---"}
       </div>
       <div className="row">
-        <button className="delete_btn" onClick={deleteCard}>
+        <button className="card_btn" onClick={deleteCard}>
           Delete idea
         </button>
       </div>
