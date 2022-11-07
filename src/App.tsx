@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 export type ideaState = {
   title: string;
   textArea: string;
+  created: Date | undefined;
   changed: Date | undefined;
   id: string;
 };
@@ -26,6 +27,7 @@ function App(): JSX.Element {
             id: id,
             title: action.title,
             textArea: action.textArea,
+            created: action.created,
             changed: action.changed,
           },
         ];
@@ -33,12 +35,12 @@ function App(): JSX.Element {
         return action.ideas;
       case "update": // to update items
         return state.map((item) => {
-          console.log(action);
           return item.id === action.id
             ? {
                 id: item.id,
                 title: action.title,
                 textArea: action.textArea,
+                created: action.created,
                 changed: action.changed,
               }
             : item;
@@ -70,7 +72,8 @@ function App(): JSX.Element {
         type: "add",
         title: titleInput,
         textArea: textAreaInput,
-        changed: new Date().toLocaleString(),
+        created: new Date().toLocaleString(),
+        changed: undefined,
       });
       setTitleInput("");
       setTextAreaInput("");

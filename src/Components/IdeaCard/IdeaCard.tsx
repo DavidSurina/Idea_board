@@ -7,12 +7,9 @@ type propTypes = {
   setter: any;
 };
 
-// have a look into useReducer to remove value from the array/update current value - or have a custom hook for this
-// maybe you could use it somewhere else later
-
 function IdeaCard(props: propTypes): JSX.Element {
   const { ideaObj, setter } = props;
-  const { title, textArea, changed, id } = ideaObj;
+  const { title, textArea, changed, created, id } = ideaObj;
   const [editTitle, setEditTitle] = useState({
     isEditable: false,
     value: title,
@@ -30,6 +27,7 @@ function IdeaCard(props: propTypes): JSX.Element {
       id: id,
       title: editTitle.value,
       textArea: editDesc.value,
+      created: created,
       changed: new Date().toLocaleString(),
     });
   }
@@ -130,11 +128,18 @@ function IdeaCard(props: propTypes): JSX.Element {
         {textAreaBtnRender}
       </div>
       {descRender}
-      <div className="btn_row">
+      <div className="row">
+        <p>Created:</p>
+        {`${created}`}
+      </div>
+      <div className="row">
+        <p>Updated:</p>
+        {changed ? `${changed}` : "---"}
+      </div>
+      <div className="row">
         <button className="delete_btn" onClick={deleteCard}>
           Delete idea
         </button>
-        <div>{`${changed}`}</div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
   width: 40%;
   padding: 0.5rem 0;
   margin: 1rem 4%;
-  min-height: 400px;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -25,15 +25,6 @@
 .row p {
   font-weight: bold;
   margin: 0;
-}
-
-.btn_row {
-  display: flex;
-  width: 90%;
-  margin: 0 auto;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .delete_btn {
