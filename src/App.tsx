@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useId } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./App.css";
 import IdeaCard from "./Components/IdeaCard/IdeaCard";
 import { v4 as uuidv4 } from "uuid";
@@ -10,13 +10,15 @@ export type ideaState = {
   id: string;
 };
 
+export const localStorageName = "ideas_arr";
+
 function App(): JSX.Element {
   const [titleInput, setTitleInput] = useState("");
   const [textAreaInput, setTextAreaInput] = useState("");
 
   const [items, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case "add":
+      case "add": // to add items
         const id = uuidv4();
         return [
           ...state,
@@ -27,7 +29,9 @@ function App(): JSX.Element {
             changed: action.changed,
           },
         ];
-      case "update":
+      case "add_all": // to retrieve items from local storage
+        return action.ideas;
+      case "update": // to update items
         return state.map((item) => {
           console.log(action);
           return item.id === action.id
@@ -39,15 +43,24 @@ function App(): JSX.Element {
               }
             : item;
         });
-      case "delete":
+      case "delete": // to delete items
         return state.filter((item) => item.id !== action.id);
       default:
         return state;
     }
   }, []);
 
+  // retrieves local storageItem and sets it if its present
   useEffect(() => {
-    console.log(items);
+    const savedItems = JSON.parse(localStorage.getItem(localStorageName));
+    if (savedItems) {
+      dispatch({ type: "add_all", ideas: savedItems });
+    }
+  }, []);
+
+  // sets items to localStorage - whenever items in useReducer change
+  useEffect(() => {
+    localStorage.setItem(localStorageName, JSON.stringify(items));
   }, [items]);
 
   function handleSubmit(e): void {
@@ -64,7 +77,8 @@ function App(): JSX.Element {
     }
   }
 
-  const boardsRender =
+  // renders the idea cards
+  const ideaCardsRender =
     items.length > 0 ? (
       items.map((idea) => (
         <IdeaCard key={idea.id} ideaObj={idea} setter={dispatch} />
@@ -75,10 +89,10 @@ function App(): JSX.Element {
 
   return (
     <div className="app">
-      <header className="header">
+      <section className="header">
         <h1>Idea Board</h1>
-      </header>
-      <body className="body">
+      </section>
+      <section className="body">
         <form className="input_wrapper" onSubmit={handleSubmit}>
           <input
             value={titleInput}
@@ -87,6 +101,7 @@ function App(): JSX.Element {
             minLength={5}
             maxLength={30}
             onChange={(e) => setTitleInput(e.target.value)}
+            data-testid="main-input"
           />
           <textarea
             value={textAreaInput}
@@ -94,7 +109,8 @@ function App(): JSX.Element {
             minLength={10}
             maxLength={140}
             rows={4}
-            placeholder="Idea title description"
+            placeholder="Idea description"
+            data-testid="main-textArea"
             onChange={(e) => setTextAreaInput(e.target.value)}
           />
           <button
@@ -106,8 +122,8 @@ function App(): JSX.Element {
           </button>
         </form>
         <div className="divider" />
-        <div className="board_wrapper">{boardsRender}</div>
-      </body>
+        <div className="board_wrapper">{ideaCardsRender}</div>
+      </section>
     </div>
   );
 }

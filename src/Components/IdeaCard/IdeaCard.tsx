@@ -43,16 +43,17 @@ function IdeaCard(props: propTypes): JSX.Element {
 
   const titleBtnRender = !editTitle.isEditable ? (
     <button
+      data-testid="edit_input"
       type="button"
       onClick={() => {
         setEditTitle((prevState) => ({ ...prevState, isEditable: true }));
-        console.log("fired", editTitle);
       }}
     >
       Edit
     </button>
   ) : (
     <button
+      data-testid="update_input"
       disabled={editTitle.value === initialInputValue}
       type="button"
       onClick={() => {
@@ -80,6 +81,7 @@ function IdeaCard(props: propTypes): JSX.Element {
 
   const textAreaBtnRender = !editDesc.isEditable ? (
     <button
+      data-testid="edit_textArea"
       type="button"
       onClick={() =>
         setEditDesc((prevState) => ({ ...prevState, isEditable: true }))
@@ -89,6 +91,7 @@ function IdeaCard(props: propTypes): JSX.Element {
     </button>
   ) : (
     <button
+      data-testid="update_textArea"
       disabled={editDesc.value === initialTextareaValue}
       type="button"
       onClick={() => {
@@ -116,7 +119,7 @@ function IdeaCard(props: propTypes): JSX.Element {
   );
 
   return (
-    <div className="card_wrapper">
+    <div className="card_wrapper" data-testid="card_wrapper">
       <div className="row">
         <p>Title:</p>
         {titleBtnRender}
