@@ -31,7 +31,7 @@ function App(): JSX.Element {
             changed: action.changed,
           },
         ];
-      case "add_all": // to retrieve items from local storage
+      case "add_all": // to retrieve items from local storage or when sorting
         return action.ideas;
       case "update": // to update items
         return state.map((item) => {
@@ -80,6 +80,22 @@ function App(): JSX.Element {
     }
   }
 
+  function sortItems(
+    array: Array<ideaState>,
+    field: "title" | "created"
+  ): void {
+    const sortedItems = array.sort(function (a, b) {
+      let fieldA = field === "title" ? a[field].toLowerCase() : a[field];
+      let fieldB = field === "title" ? b[field].toLowerCase() : b[field];
+      if (fieldA < fieldB) return -1;
+      if (fieldA > fieldB) return 1;
+      return 0;
+    });
+    console.log(sortedItems);
+
+    dispatch({ ideas: sortedItems });
+  }
+
   // renders the idea cards
   const ideaCardsRender =
     items.length > 0 ? (
@@ -125,7 +141,33 @@ function App(): JSX.Element {
           </button>
         </form>
         <div className="divider" />
-        <div className="board_wrapper">{ideaCardsRender}</div>
+        <div className="filter_wrapper">
+          <p>Filter by:</p>
+          <div className="filter_btn-wrapper">
+            <button
+              type="button"
+              className="input_btn"
+              onClick={(e) => {
+                e.preventDefault();
+                sortItems(items, "created");
+              }}
+            >
+              Created Date
+            </button>
+            <div className="filter_separator" />
+            <button
+              type="button"
+              className="input_btn"
+              onClick={(e) => {
+                e.preventDefault();
+                sortItems(items, "title");
+              }}
+            >
+              Title
+            </button>
+          </div>
+        </div>
+        <section className="board_wrapper">{ideaCardsRender}</section>
       </section>
     </div>
   );
